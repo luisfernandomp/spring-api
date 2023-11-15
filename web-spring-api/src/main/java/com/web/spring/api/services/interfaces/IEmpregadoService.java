@@ -1,4 +1,4 @@
-package com.web.spring.api.services;
+package com.web.spring.api.services.interfaces;
 
 import com.web.spring.api.configurations.ApiResponse;
 import com.web.spring.api.dto.EmpregadoDto;

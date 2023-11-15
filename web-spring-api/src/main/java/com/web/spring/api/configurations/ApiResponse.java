@@ -7,7 +7,7 @@ public class ApiResponse {
     private boolean success;
     private Object data;
     private HttpStatus status;
-
+    
     public HttpStatus getStatus() {
 		return status;
 	}

@@ -1,12 +1,14 @@
 package com.web.spring.api.entities;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -27,6 +29,9 @@ public class Empregado {
 
 	@Column(nullable = false)
 	private LocalDateTime dataCadastro;
+	
+	@OneToMany(mappedBy = "empregado")
+	private List<Carro> carros;
 
 	public Empregado() {
 		

@@ -5,11 +5,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
 import com.web.spring.api.configurations.ApiResponse;
 import com.web.spring.api.configurations.ApiResponseMessage;
-import com.web.spring.api.exceptions.CustomException;
 import com.web.spring.api.dto.PaisDto;
 import com.web.spring.api.entities.Pais;
+import com.web.spring.api.exceptions.CustomException;
 import com.web.spring.api.repositories.PaisRepository;
 
 @Service
@@ -44,13 +45,13 @@ public class PaisService implements IPaisService {
         return new ApiResponse(true, paisOpt, HttpStatus.OK);
     }
 
-    @Override
+    /*@Override
     public ApiResponse save(paisOpt dto){
         var pais = new Pais(dto.getNome(), dto.getContinente(), dto.getPopulacao());
         repo.save(pais);
 
         return new ApiResponse(true, new ApiResponseMessage("Pais cadastrado com sucesso"), HttpStatus.OK);
-    }
+    }*/
 
     @Override
     public ApiResponse delete(long id) throws CustomException{
@@ -70,4 +71,10 @@ public class PaisService implements IPaisService {
 
         return new ApiResponse(true, paises, HttpStatus.OK);
     }
+
+	@Override
+	public ApiResponse save(PaisDto dto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

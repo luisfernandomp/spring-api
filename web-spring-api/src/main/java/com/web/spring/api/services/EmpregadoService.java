@@ -12,6 +12,7 @@ import com.web.spring.api.dto.EmpregadoDto;
 import com.web.spring.api.entities.Empregado;
 import com.web.spring.api.exceptions.CustomException;
 import com.web.spring.api.repositories.EmpregadoRepository;
+import com.web.spring.api.services.interfaces.IEmpregadoService;
 
 @Service
 public class EmpregadoService implements IEmpregadoService{

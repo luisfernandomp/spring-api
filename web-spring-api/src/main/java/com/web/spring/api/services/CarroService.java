@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.web.spring.api.configurations.ApiResponse;
 import com.web.spring.api.configurations.ApiResponseMessage;
-import com.web.spring.api.exceptions.CustomException;
 import com.web.spring.api.dto.CarroDto;
 import com.web.spring.api.entities.Carro;
+import com.web.spring.api.exceptions.CustomException;
 import com.web.spring.api.repositories.CarroRepository;
 
 @Service
@@ -46,13 +46,6 @@ public class CarroService implements ICarroService {
         return new ApiResponse(true, carroOpt, HttpStatus.OK);
     }
 
-    @Override
-    public ApiResponse save(carroOpt dto){
-        var carro = new Carro(dto.getModelo(), dto.getMarca(), dto.getAno(), dto.getCategoria());
-        repo.save(carro);
-
-        return new ApiResponse(true, new ApiResponseMessage("Carro cadastrado com sucesso"), HttpStatus.OK);
-    }
 
     @Override
     public ApiResponse delete(long id) throws CustomException{
@@ -72,4 +65,10 @@ public class CarroService implements ICarroService {
 
         return new ApiResponse(true, carros, HttpStatus.OK);
     }
+
+	@Override
+	public ApiResponse save(CarroDto dto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
