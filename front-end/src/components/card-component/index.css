@@ -1,0 +1,125 @@
+.article-employee {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 2%;
+}
+
+.info-employee {
+  width: 100%;
+  height: 98px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  -webkit-box-shadow: 10px 10px 20px -16px rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 10px 10px 20px -16px rgba(0, 0, 0, 0.12);
+  box-shadow: 10px 10px 20px -16px rgba(0, 0, 0, 0.12);
+}
+
+.info-employee:hover {
+  -webkit-box-shadow: 10px 10px 20px 3px rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 10px 10px 20px 3px rgba(0, 0, 0, 0.12);
+  box-shadow: 10px 10px 20px 3px rgba(0, 0, 0, 0.12);
+}
+
+.image-user {
+  width: 80px;
+  height: 100%;
+  object-fit: cover;
+  margin-right: 1em;
+  border-radius: 8px 0 0 8px;
+  background-position: center;
+  background-size: cover;
+}
+
+.text-negrito {
+  font-size: 0.8em !important;
+}
+
+.info {
+  font-size: 0.7em;
+}
+
+.details {
+  display: flex;
+  height: 100%;
+  width: 85%;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+
+.status {
+  margin-top: 4px;
+  height: 20px;
+  width: 56px;
+  border-radius: 50px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.8em;
+  text-transform: lowercase;
+  text-align: center;
+  text-shadow: 2px 5px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.status-ativo {
+  background-color: #6fe2cb;
+}
+
+.status-inativo {
+  background-color: #dc143c;
+}
+
+.delete, .edit{
+  height: 100%;
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete{
+  color: #ffff;
+  background-color: #cf0a30;
+  border-radius: 0 8px 8px 0;
+}
+
+.edit {
+  color: gray;
+}
+
+.edit:hover, .delete:hover {
+  color: #f2b950;
+}
+
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) 
+{
+  .info-employee {
+    height: 88px;
+  }
+
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) 
+{
+  .new-employee {
+    font-size: 0.8em;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {}
