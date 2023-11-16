@@ -11,6 +11,7 @@ import Modal from 'react-bootstrap/Modal';
 import { defaultToastDefinitions } from "../../../core/utils/definitions";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import carroService from "../../../core/services/carro-service";
 
 export default function ListEmployee() {
   const [users, setUsers] = useState([]);
@@ -25,6 +26,7 @@ export default function ListEmployee() {
     setShow(true);
   };
 
+  const navigate = useNavigate();
   const [showModalCarro, setShowModalCarro] = useState(false);
   const [carros, setCarros] = useState([]);
   const [carroEdit, setCarroEdit] = useState(null);
@@ -37,6 +39,7 @@ export default function ListEmployee() {
       empregado_id: 0
     }
   }
+  const [empregadoId, setEmpregadoId] = useState(0);
 
   const formik = useFormik({
     initialValues: initialData(),
@@ -47,13 +50,45 @@ export default function ListEmployee() {
       categoria: Yup.string().required("Campo obrigatório"),
       empregado_id: Yup.string().required("Campo obrigatório"),
     }),
-    onSubmit: (values, { resetForm }) => {
-      createEmpregado(values, resetForm);
+    onSubmit: (values) => {
+      if(!carroEdit) createCarro(values, resetForm);
+      else alterarCarro(values);
     }
   });
 
+  const resetForm = () => {
+    formik.resetForm();
+  }
 
-  let navigate = useNavigate();
+  const createCarro = async (values) => {
+    await carroService.create(values)
+      .then(() => { 
+        toast.success('Carro criado com sucesso!', defaultToastDefinitions());
+        getAllByEmpregado(values.empregado_id);
+        resetForm();
+      })
+      .catch(() => toast.error('Não foi possível realizar a operação!', defaultToastDefinitions()));
+  }
+
+  const alterarCarro = async (values) => {
+    await carroService.edit(values.id, values)
+      .then(() => { 
+        toast.success('Carro alterado com sucesso!', defaultToastDefinitions());
+        getAllByEmpregado(values.empregado_id);
+        resetForm();
+      })
+      .catch((err) => toast.error('Não foi possível realizar a operação!', defaultToastDefinitions()));
+  }
+
+  const alterarFormParaEdicao = (carro) => {
+    setCarroEdit(carro);
+    formik.setFieldValue("id", carro.id);
+    formik.setFieldValue("modelo", carro.modelo);
+    formik.setFieldValue("marca", carro.marca);
+    formik.setFieldValue("ano", carro.ano);
+    formik.setFieldValue("categoria", carro.categoria);
+    formik.setFieldValue("empregado_id", carro.empregado.id);    
+  }
 
   const handleExcluir = async () => {
     await EmployeeService.deleteUser(idUser).then(() => {
@@ -97,6 +132,23 @@ export default function ListEmployee() {
     if (formik.touched[property] && formik.errors[property])
       return <span className="text-red-400">{formik.errors[property]}</span>;
     return <></>;
+  }
+
+  const getAllByEmpregado = async (id) => {
+    setCarroEdit(null);
+    resetForm();
+    formik.setFieldValue("empregado_id", id); 
+    setShowModalCarro(true);
+    await carroService.getAllByEmpregadoId(id).then((resultado) => {
+      setCarros(resultado.data.data);
+    }).catch(() => {
+      toast.error('Ocorreu um erro na Api!', defaultToastDefinitions());
+    })
+  }
+
+  const handleCloseModalCarro = () => {
+    setShowModalCarro(false);
+    resetForm();
   }
 
   const dataEmpty = () => {
@@ -176,7 +228,7 @@ export default function ListEmployee() {
               <FontAwesomeIcon icon={faTrash} />
             </td>
             <td>
-              <FontAwesomeIcon icon={faGear} onClick={() => setShowModalCarro(true)} />
+              <FontAwesomeIcon icon={faGear} onClick={() => getAllByEmpregado(e.id)} />
             </td>
           </tr>
         ); })  }
@@ -205,11 +257,14 @@ export default function ListEmployee() {
       </Modal>
 
 
-      <Modal show={showModalCarro} onHide={() => setShowModalCarro(false)} animation={true}>
+      <Modal size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered 
+        show={showModalCarro} onHide={() => setShowModalCarro(false)} animation={true}>
         <Modal.Header closeButton>
           <Modal.Title>Cadastrar Carro</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ backgroundColor: '#f7f7f7'}}>
         <form className="container info-users-details" onSubmit={formik.handleSubmit}>
             <div className="details-user">
                 <label htmlFor="nome">Modelo</label>
@@ -220,7 +275,7 @@ export default function ListEmployee() {
                 placeholder="modelo"
                 onChange={formik.handleChange}
                 onBlur={(e) => formik.setFieldTouched("modelo", e)}
-                value={formik.values.nome}
+                value={formik.values.modelo}
                 className="input-details"
                 />
                 {formikErros('modelo')}
@@ -262,7 +317,7 @@ export default function ListEmployee() {
                 placeholder="categoria"
                 onChange={formik.handleChange}
                 onBlur={(e) => formik.setFieldTouched("categoria", e)}
-                value={formik.values.marca}
+                value={formik.values.categoria}
                 className="input-details"
                 />
                 {formikErros('categoria')}
@@ -281,7 +336,7 @@ export default function ListEmployee() {
               <th scope="col">Modelo</th>
               <th scope="col">Marca</th>
               <th scope="col">Ano</th>
-              <th scope="col">Categoria</th>  
+              <th scope="col">Categoria</th> 
               <th scope="col" style={{ textAlign: 'center' }}>Excluir</th>
               <th scope="col" style={{ textAlign: 'center' }}>Editar</th>
             </tr>
@@ -291,14 +346,14 @@ export default function ListEmployee() {
             return (
               <tr key={c.id}>
                 <th scope="row">{c.id}</th>
-                <td>{c.modelo}</td>
+                <td className="">{c.modelo}</td>
                 <td>{c.marca}</td>
                 <td>{c.ano}</td>
                 <td>{c.categoria}</td>
                 <td style={{ textAlign: 'center' }}>
-                  
+                <FontAwesomeIcon icon={faTrash} />
                 </td>
-                <td className="edit" style={{ textAlign: 'center' }} onClick={() => alterarFormParaEdicao(u)}>
+                <td className="edit" style={{ textAlign: 'center' }} onClick={() => alterarFormParaEdicao(c)}>
                   <FontAwesomeIcon icon={faPenToSquare} />
                 </td>
               </tr>
@@ -310,11 +365,8 @@ export default function ListEmployee() {
         </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleClose}>
-            Não
-          </Button>
-          <Button variant="danger" onClick={handleExcluir}>
-            Sim
+          <Button variant="primary" onClick={() => handleCloseModalCarro()}>
+            Fechar
           </Button>
         </Modal.Footer>
       </Modal>

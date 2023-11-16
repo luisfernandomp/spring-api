@@ -4,7 +4,7 @@ import EditAndDetailsEmployee from "../../pages/empregado/edit-details-employee"
 import NoPage from "../../pages/no-page";
 import CreateEmployee from "../../pages/empregado/create-employee";
 import Login from "../../pages/login";
-import { HeaderLayout } from "../../components/header-layout";
+import HeaderLayout from "../../components/header-layout";
 import ListUsuarios from "../../pages/usuario/listar-usuarios";
 import ListPaises from "../../pages/pais";
 

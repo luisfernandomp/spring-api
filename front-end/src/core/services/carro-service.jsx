@@ -21,10 +21,15 @@ const deleteById = (id) => {
   return http.delete(`carros/${id}`, authService.getHeaderAuth());
 }
 
+const getAllByEmpregadoId = (id) => {
+  return http.get(`carros/empregado/${id}`, authService.getHeaderAuth());
+}
+
 export default {
   getAll,
   getById,
   edit,
   create,
-  deleteById
+  deleteById,
+  getAllByEmpregadoId
 };

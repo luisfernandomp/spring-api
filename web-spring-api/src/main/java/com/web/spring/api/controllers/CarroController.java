@@ -32,6 +32,12 @@ public class CarroController {
         var response = service.find(id);
         return new ResponseEntity<>(response, response.getStatus());
     }
+    
+    @GetMapping("/empregado/{id}")
+    public ResponseEntity<Object> getAllByEmpregadoId(@PathVariable long id){
+    	var response = service.getAllByEmpregadoId(id);
+    	return new ResponseEntity<>(response, response.getStatus());
+    }
 
     @GetMapping("filtro")
     public ResponseEntity<Object> getByModelo(@RequestParam String q){

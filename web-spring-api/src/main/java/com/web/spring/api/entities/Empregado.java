@@ -38,7 +38,7 @@ public class Empregado {
 	@JoinColumn(name = "pais_id", referencedColumnName = "id")
 	private Pais pais;
 	
-	@OneToMany(mappedBy = "empregado", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "empregado", fetch = FetchType.LAZY)
 	private List<Carro> carros;
 
 	public Empregado() {
@@ -59,10 +59,6 @@ public class Empregado {
 	
 	public String getNome() {
 		return nome;
-	}
-
-	public List<Carro> getCarros(){
-		return carros;
 	}
 	
 	public void setPais(Pais pais) {

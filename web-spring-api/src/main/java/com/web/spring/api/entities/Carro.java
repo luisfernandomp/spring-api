@@ -31,6 +31,14 @@ public class Carro {
     @JoinColumn(name = "empregado_id")
     private Empregado empregado;
     
+    public Empregado getEmpregado() {
+    	return empregado;
+    }
+    
+    public void setEmpregado(Empregado empregado) {
+    	this.empregado = empregado;
+    }
+    
     public Carro(){}
 
     public Carro(String modelo, String marca, int ano, String categoria, Empregado empregado) {
