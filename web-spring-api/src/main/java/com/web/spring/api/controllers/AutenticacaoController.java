@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web.spring.api.configurations.ApiResponse;
+import com.web.spring.api.dto.ApiResponseDto;
 import com.web.spring.api.dto.AuthenticationDto;
 import com.web.spring.api.dto.CriarContaDto;
 import com.web.spring.api.services.UsuarioService;
@@ -33,7 +33,7 @@ public class AutenticacaoController {
 	@PostMapping("/criar-conta")
 	public ResponseEntity<Object> criarConta(@RequestBody @Valid CriarContaDto criarContaDto)
 	{
-		ApiResponse response = usuarioService.save(criarContaDto);
+		ApiResponseDto response = usuarioService.save(criarContaDto);
 		return new ResponseEntity<>(response, response.getStatus());
 	}
 }

@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.web.spring.api.configurations.ApiResponse;
-import com.web.spring.api.configurations.ApiResponseMessage;
+import com.web.spring.api.dto.ApiResponseDto;
+import com.web.spring.api.dto.ApiResponseMessageDto;
 import com.web.spring.api.dto.CarroDto;
 import com.web.spring.api.entities.Carro;
 import com.web.spring.api.exceptions.CustomException;
@@ -19,36 +19,36 @@ public class CarroService implements ICarroService {
     private CarroRepository repo;
 
     @Override
-    public ApiResponse getAll(){
+    public ApiResponseDto getAll(){
         var car = repo.findAll();
-        return new ApiResponse(true, car, HttpStatus.OK);
+        return new ApiResponseDto(true, car, HttpStatus.OK);
     }
 
     @Override
-    public ApiResponse find(long id){
-        return new ApiResponse(true, findById(id), HttpStatus.OK);
+    public ApiResponseDto find(long id){
+        return new ApiResponseDto(true, findById(id), HttpStatus.OK);
     }
     private Optional<Carro> findById(long id){
         return repo.findById(id);
     }
 
     @Override
-    public ApiResponse update(CarroDto dto, long id){
+    public ApiResponseDto update(CarroDto dto, long id){
         var carroOpt = findById(id);
 
         if(carroOpt.isPresent()) {
-            carroOpt.get().setModelo(dto.getModelo());
-            carroOpt.get().setMarca(dto.getMarca());
-            carroOpt.get().setAno(dto.getAno());
-            carroOpt.get().setCategoria(dto.getCategoria());
+            carroOpt.get().setModelo(dto.modelo());
+            carroOpt.get().setMarca(dto.marca());
+            carroOpt.get().setAno(dto.ano());
+            carroOpt.get().setCategoria(dto.categoria());
             repo.save(carroOpt.get());
         }
-        return new ApiResponse(true, carroOpt, HttpStatus.OK);
+        return new ApiResponseDto(true, carroOpt, HttpStatus.OK);
     }
 
 
     @Override
-    public ApiResponse delete(long id) throws CustomException{
+    public ApiResponseDto delete(long id) throws CustomException{
         var carro = findById(id);
 
         if(!carro.isPresent())
@@ -56,18 +56,18 @@ public class CarroService implements ICarroService {
 
         repo.delete(carro.get());
 
-        return new ApiResponse(true, new ApiResponseMessage("Carro cadastrado com sucesso"), HttpStatus.OK);
+        return new ApiResponseDto(true, new ApiResponseMessageDto("Carro cadastrado com sucesso"), HttpStatus.OK);
     }
 
     @Override
-    public ApiResponse getByModelo(String q) {
+    public ApiResponseDto getByModelo(String q) {
         var carros = repo.getByModelo(q);
 
-        return new ApiResponse(true, carros, HttpStatus.OK);
+        return new ApiResponseDto(true, carros, HttpStatus.OK);
     }
 
 	@Override
-	public ApiResponse save(CarroDto dto) {
+	public ApiResponseDto save(CarroDto dto) {
 		// TODO Auto-generated method stub
 		return null;
 	}

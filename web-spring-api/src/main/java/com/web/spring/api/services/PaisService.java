@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.web.spring.api.configurations.ApiResponse;
-import com.web.spring.api.configurations.ApiResponseMessage;
+import com.web.spring.api.dto.ApiResponseDto;
+import com.web.spring.api.dto.ApiResponseMessageDto;
 import com.web.spring.api.dto.PaisDto;
 import com.web.spring.api.entities.Pais;
 import com.web.spring.api.exceptions.CustomException;
@@ -19,30 +19,30 @@ public class PaisService implements IPaisService {
     private PaisRepository repo;
 
     @Override
-    public ApiResponse getAll(){
+    public ApiResponseDto getAll(){
         var paisx = repo.findAll();
-        return new ApiResponse(true, paisx, HttpStatus.OK);
+        return new ApiResponseDto(true, paisx, HttpStatus.OK);
     }
 
     @Override
-    public ApiResponse find(long id){
-        return new ApiResponse(true, findById(id), HttpStatus.OK);
+    public ApiResponseDto find(long id){
+        return new ApiResponseDto(true, findById(id), HttpStatus.OK);
     }
     private Optional<Pais> findById(long id){
         return repo.findById(id);
     }
 
     @Override
-    public ApiResponse update(PaisDto dto, long id){
+    public ApiResponseDto update(PaisDto dto, long id){
         var paisOpt = findById(id);
 
         if(paisOpt.isPresent()) {
-            paisOpt.get().setNome(dto.getNome());
-            paisOpt.get().setContinente(dto.getContinente());
-            paisOpt.get().setPopulacao(dto.getPopulacao());
+            paisOpt.get().setNome(dto.nome());
+            paisOpt.get().setContinente(dto.continente());
+            paisOpt.get().setPopulacao(dto.populacao());
             repo.save(paisOpt.get());
         }
-        return new ApiResponse(true, paisOpt, HttpStatus.OK);
+        return new ApiResponseDto(true, paisOpt, HttpStatus.OK);
     }
 
     /*@Override
@@ -54,7 +54,7 @@ public class PaisService implements IPaisService {
     }*/
 
     @Override
-    public ApiResponse delete(long id) throws CustomException{
+    public ApiResponseDto delete(long id) throws CustomException{
         var pais = findById(id);
 
         if(!pais.isPresent())
@@ -62,18 +62,18 @@ public class PaisService implements IPaisService {
 
         repo.delete(pais.get());
 
-        return new ApiResponse(true, new ApiResponseMessage("Pais cadastrado com sucesso"), HttpStatus.OK);
+        return new ApiResponseDto(true, new ApiResponseMessageDto("Pais cadastrado com sucesso"), HttpStatus.OK);
     }
 
     @Override
-    public ApiResponse getByNome(String q) {
+    public ApiResponseDto getByNome(String q) {
         var paises = repo.getByNome(q);
 
-        return new ApiResponse(true, paises, HttpStatus.OK);
+        return new ApiResponseDto(true, paises, HttpStatus.OK);
     }
 
 	@Override
-	public ApiResponse save(PaisDto dto) {
+	public ApiResponseDto save(PaisDto dto) {
 		// TODO Auto-generated method stub
 		return null;
 	}

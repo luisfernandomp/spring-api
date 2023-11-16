@@ -7,9 +7,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.web.spring.api.configurations.ApiResponse;
-import com.web.spring.api.configurations.ApiResponseMessage;
 import com.web.spring.api.configurations.security.TokenService;
+import com.web.spring.api.dto.ApiResponseDto;
+import com.web.spring.api.dto.ApiResponseMessageDto;
 import com.web.spring.api.dto.AuthenticationDto;
 import com.web.spring.api.dto.AuthenticationResponseDto;
 import com.web.spring.api.dto.CriarContaDto;
@@ -31,37 +31,37 @@ public class UsuarioService implements IUsuarioService {
 	private TokenService tokenService;
 	
 	@Override
-	public ApiResponse logar(AuthenticationDto dto) {
+	public ApiResponseDto logar(AuthenticationDto dto) {
 		var user = new UsernamePasswordAuthenticationToken(dto.email(), dto.senha());
 		var auth = authManager.authenticate(user);
 		
 		var token = tokenService.generateToken((Usuario)auth.getPrincipal());
 		
-		return new ApiResponse(true, new AuthenticationResponseDto(token), HttpStatus.OK);
+		return new ApiResponseDto(true, new AuthenticationResponseDto(token), HttpStatus.OK);
 	}
 	
 	@Override
-	public ApiResponse getAll() {
+	public ApiResponseDto getAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ApiResponse find(long id) {
+	public ApiResponseDto find(long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ApiResponse update(CriarContaDto dto, long id) {
+	public ApiResponseDto update(CriarContaDto dto, long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ApiResponse save(CriarContaDto dto) {
+	public ApiResponseDto save(CriarContaDto dto) {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
-		ApiResponseMessage message = new ApiResponseMessage();
+		ApiResponseMessageDto message = new ApiResponseMessageDto();
 		
 		if(this.repo.findByEmail(dto.email()) != null) {
 			message.addMessage("Usuário já cadastrado");
@@ -83,6 +83,6 @@ public class UsuarioService implements IUsuarioService {
 			status = HttpStatus.OK;
 			
 		}
-		return new ApiResponse(false, message, status);
+		return new ApiResponseDto(false, message, status);
 	}
 }

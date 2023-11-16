@@ -1,8 +1,8 @@
-package com.web.spring.api.configurations;
+package com.web.spring.api.dto;
 
 import org.springframework.http.HttpStatus;
 
-public class ApiResponse {
+public class ApiResponseDto {
 
     private boolean success;
     private Object data;
@@ -16,7 +16,7 @@ public class ApiResponse {
 		this.status = status;
 	}
 
-	public ApiResponse(boolean success, Object data, HttpStatus status) {
+	public ApiResponseDto(boolean success, Object data, HttpStatus status) {
 		super();
 		this.success = success;
 		this.data = data;

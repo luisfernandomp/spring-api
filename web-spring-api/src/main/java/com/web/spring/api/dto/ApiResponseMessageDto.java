@@ -1,22 +1,22 @@
-package com.web.spring.api.configurations;
+package com.web.spring.api.dto;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ApiResponseMessage {
+public class ApiResponseMessageDto {
 	private List<String> messages;
 	
-	public ApiResponseMessage(List<String> messages) {
+	public ApiResponseMessageDto(List<String> messages) {
 		super();
 		this.messages = messages;
 	}
 
-	public ApiResponseMessage(String message) {
+	public ApiResponseMessageDto(String message) {
 		messages = Arrays.asList(message);
 	}
 	
-	public ApiResponseMessage() {}
+	public ApiResponseMessageDto() {}
 
 	public List<String> getMessages() {
 		return messages;

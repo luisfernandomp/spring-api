@@ -1,5 +1,4 @@
 package com.web.spring.api.dto;
 
-public record AuthenticationDto(String email, String senha) {
-
-}
+public record AuthenticationDto(String email, String senha) 
+{}
