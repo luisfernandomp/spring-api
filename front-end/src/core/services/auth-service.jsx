@@ -1,4 +1,5 @@
 import http from "../utils/http-axios";
+import { jwtDecode } from "jwt-decode";
 
 const logar = (auth) => {
   return http.post("auth/login", auth);
@@ -8,8 +9,13 @@ const getToken = () => {
   return localStorage.getItem("TOKEN");
 }
 
-const isAuthenticated = () => {
+const getTokenDecoded = () => {
+  const user = jwtDecode(getToken());
 
+  return  {
+    nome: user['sub'],
+    role: user['role']
+  };
 }
 
 const getHeaderAuth = () => {
@@ -22,5 +28,6 @@ const getHeaderAuth = () => {
 export default {
   logar,
   getToken,
-  getHeaderAuth
+  getHeaderAuth,
+  getTokenDecoded
 };

@@ -5,6 +5,7 @@ import NoPage from "../../pages/no-page";
 import CreateEmployee from "../../pages/empregado/create-employee";
 import Login from "../../pages/login";
 import { HeaderLayout } from "../../components/header-layout";
+import ListUsuarios from "../../pages/usuario/listar-usuarios";
 
 const Rotas = (
   <BrowserRouter>
@@ -20,6 +21,7 @@ const Rotas = (
           element={<EditAndDetailsEmployee />}
         />
         <Route path="/create-employee" element={<CreateEmployee />} />
+        <Route path="/usuarios" element={<ListUsuarios />} />
       </Route>
       <Route path="*" element={<NoPage />} />
     </Routes>

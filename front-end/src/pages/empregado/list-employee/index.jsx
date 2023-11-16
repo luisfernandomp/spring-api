@@ -62,7 +62,7 @@ export default function ListEmployee() {
 
   useEffect(() => {
     listar();
-  }, [users]);
+  }, []);
 
 
   function undefinedOrNull(value){
@@ -136,7 +136,7 @@ export default function ListEmployee() {
       
       { usersFilter.length == 0 &&
        (<div className="not-found">
-        Nenhum usuário encontrado
+        Nenhum empregado encontrado
         </div>)}
       </div>
 
