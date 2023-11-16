@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import "./index.css";
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import EmployeeService from "../../../core/services/employee-service";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,13 +13,17 @@ import { toast } from 'react-toastify';
 import CurrencyInput from "react-currency-input-field";
 registerLocale("ptBR", ptBR);
 import  { defaultToastDefinitions } from "../../../core/utils/definitions"
+import paisService from "../../../core/services/pais-service";
 
 export default function CreateEmployee() {
+  const [paises, setPaises] = useState([]);
   const initialData = () => {
     return {
       nome: "",
       cargo: "",
-      salario: ""
+      salario: "",
+      carros: [],
+      pais_id: 0
     }
   }
 
@@ -27,19 +31,26 @@ export default function CreateEmployee() {
     initialValues: initialData(),
     validationSchema: Yup.object().shape({
       salario: Yup.number().required("Salário obrigatório"),
-      nome: Yup.string()
-        .min(5, "Mínimo de 3 caracteres")
-        .required("Nome obrigatório"),
-      cargo: Yup.string()
-        .min(5, "Mínimo de 3 caracteres")
-        .required("Cargo obrigatório"),
+      nome: Yup.string().min(5, "Mínimo de 5 caracteres").required("Nome obrigatório"),
+      cargo: Yup.string().min(5, "Mínimo de 5 caracteres").required("Cargo obrigatório"),
+      pais_id: Yup.number().required("Campo obrigatório")
     }),
     onSubmit: (values, { resetForm }) => {
       createEmpregado(values, resetForm);
     }
   });
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    listar();
+  }, []);
+
+  const listar = useCallback(async () => {
+    await paisService.getAll().then((resultado) => {
+      setPaises(resultado.data.data);
+    });
+  }, []);
 
   const createEmpregado = async (empregado, resetForm) => {
     await EmployeeService.create(empregado)
@@ -55,6 +66,12 @@ export default function CreateEmployee() {
   const back = () => {
     navigate("/empregados");
   };
+
+  const formikErros = (property) => {
+    if (formik.touched[property] && formik.errors[property])
+      return <span className="text-red-400">{formik.errors[property]}</span>;
+    return <></>;
+  }
 
   return (
     <section className="details-section">
@@ -118,6 +135,27 @@ export default function CreateEmployee() {
             {formik.touched.cargo && formik.errors.cargo && (
               <span className="text-red-400">{formik.errors.cargo}</span>
             )}
+          </div>
+          <div className="details-user">
+            <label htmlFor="nome">Pais</label>
+            <select
+                  onChange={formik.handleChange}
+                  onBlur={(e) => formik.setFieldTouched("pais_id", e)}
+                  className="select-status"
+                  value={formik.values.pais_id}
+                  name="pais_id"
+                  id="pais_id"
+                >
+                  <option selected>Selecione um país</option>
+                  { paises.map(p => {
+                    return (
+                      <option key={p.id} value={p.id}>
+                        {p.nome}
+                      </option>
+                    );
+                  })}
+                </select>
+                {formikErros('pais_id')}
           </div>
 
           <button className="submit" type="submit">

@@ -4,11 +4,13 @@ import EmployeeService from "../../../core/services/employee-service";
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlus, faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCirclePlus, faPenToSquare, faTrash, faGear } from "@fortawesome/free-solid-svg-icons";
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import Modal from 'react-bootstrap/Modal';
 import { defaultToastDefinitions } from "../../../core/utils/definitions";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 export default function ListEmployee() {
   const [users, setUsers] = useState([]);
@@ -17,12 +19,39 @@ export default function ListEmployee() {
   const [endDate, setEndDate] = useState();
   const [idUser, setIdUser] = useState("");
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
     setIdUser(id);
     setShow(true);
   };
+
+  const [showModalCarro, setShowModalCarro] = useState(false);
+  const [carros, setCarros] = useState([]);
+  const [carroEdit, setCarroEdit] = useState(null);
+  const initialData = () => {
+    return {
+      modelo: "",
+      marca: "",
+      ano: 0,
+      categoria: "",
+      empregado_id: 0
+    }
+  }
+
+  const formik = useFormik({
+    initialValues: initialData(),
+    validationSchema: Yup.object().shape({
+      modelo: Yup.string().required("Campo obrigatório"),
+      marca: Yup.string().required("Campo obrigatório"),
+      ano: Yup.number().required("Cargo obrigatório"),
+      categoria: Yup.string().required("Campo obrigatório"),
+      empregado_id: Yup.string().required("Campo obrigatório"),
+    }),
+    onSubmit: (values, { resetForm }) => {
+      createEmpregado(values, resetForm);
+    }
+  });
+
 
   let navigate = useNavigate();
 
@@ -64,6 +93,17 @@ export default function ListEmployee() {
     listar();
   }, []);
 
+  const formikErros = (property) => {
+    if (formik.touched[property] && formik.errors[property])
+      return <span className="text-red-400">{formik.errors[property]}</span>;
+    return <></>;
+  }
+
+  const dataEmpty = () => {
+    if(carros.length == 0) 
+        return <div className="not-found"> Nenhum carro encontrado </div>;
+    return <></>;
+  }
 
   function undefinedOrNull(value){
     return value === null || value === undefined;
@@ -114,6 +154,8 @@ export default function ListEmployee() {
           <th scope="col">Nome</th>
           <th scope="col">Salário</th>
           <th scope="col">Cargo</th>
+          <th scope="col">Pais</th>
+          <th scope="col"></th>
           <th scope="col"></th>
           <th scope="col"></th>    
         </tr>
@@ -126,11 +168,15 @@ export default function ListEmployee() {
             <td>{e.nome}</td>
             <td>{e.salario}</td>
             <td>{e.cargo}</td>
+            <td>{e.pais?.nome}</td>
             <td className="edit" onClick={() => editUser(e.id)}>
               <FontAwesomeIcon icon={faPenToSquare} />
             </td>
             <td className="delete" onClick={() => handleShow(e.id)}>
               <FontAwesomeIcon icon={faTrash} />
+            </td>
+            <td>
+              <FontAwesomeIcon icon={faGear} onClick={() => setShowModalCarro(true)} />
             </td>
           </tr>
         ); })  }
@@ -148,6 +194,121 @@ export default function ListEmployee() {
           <Modal.Title>Excluir funcionário</Modal.Title>
         </Modal.Header>
         <Modal.Body>Deseja confirmar a exclusão desse funcionário?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleClose}>
+            Não
+          </Button>
+          <Button variant="danger" onClick={handleExcluir}>
+            Sim
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
+      <Modal show={showModalCarro} onHide={() => setShowModalCarro(false)} animation={true}>
+        <Modal.Header closeButton>
+          <Modal.Title>Cadastrar Carro</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <form className="container info-users-details" onSubmit={formik.handleSubmit}>
+            <div className="details-user">
+                <label htmlFor="nome">Modelo</label>
+                <input
+                id="modelo"
+                name="modelo"
+                type="text"
+                placeholder="modelo"
+                onChange={formik.handleChange}
+                onBlur={(e) => formik.setFieldTouched("modelo", e)}
+                value={formik.values.nome}
+                className="input-details"
+                />
+                {formikErros('modelo')}
+            </div>
+            <div className="details-user">
+                <label htmlFor="email">Marca</label>
+                <input
+                id="marca"
+                name="marca"
+                type="text"
+                placeholder="marca"
+                onChange={formik.handleChange}
+                onBlur={(e) => formik.setFieldTouched("marca", e)}
+                value={formik.values.marca}
+                className="input-details"
+                />
+                {formikErros('marca')}
+            </div>
+            <div className="details-user">
+                <label htmlFor="email">Ano</label>
+                <input
+                id="ano"
+                name="ano"
+                type="number"
+                placeholder="ano"
+                onChange={formik.handleChange}
+                onBlur={(e) => formik.setFieldTouched("ano", e)}
+                value={formik.values.ano}
+                className="input-details"
+                />
+                {formikErros('ano')}
+            </div>
+            <div className="details-user">
+                <label htmlFor="email">Categoria</label>
+                <input
+                id="categoria"
+                name="categoria"
+                type="text"
+                placeholder="categoria"
+                onChange={formik.handleChange}
+                onBlur={(e) => formik.setFieldTouched("categoria", e)}
+                value={formik.values.marca}
+                className="input-details"
+                />
+                {formikErros('categoria')}
+            </div>
+            <button className="submit" type="submit">
+                { carroEdit != null ? 'Atualizar' : 'Cadastrar' }
+            </button>
+        </form>
+
+        <div className="container">
+            { carros.length > 0 && (
+            <table className="table table-hover table-users">
+            <thead>
+              <tr>
+              <th scope="col">#</th>
+              <th scope="col">Modelo</th>
+              <th scope="col">Marca</th>
+              <th scope="col">Ano</th>
+              <th scope="col">Categoria</th>  
+              <th scope="col" style={{ textAlign: 'center' }}>Excluir</th>
+              <th scope="col" style={{ textAlign: 'center' }}>Editar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {carros.map((c) => {
+            return (
+              <tr key={c.id}>
+                <th scope="row">{c.id}</th>
+                <td>{c.modelo}</td>
+                <td>{c.marca}</td>
+                <td>{c.ano}</td>
+                <td>{c.categoria}</td>
+                <td style={{ textAlign: 'center' }}>
+                  
+                </td>
+                <td className="edit" style={{ textAlign: 'center' }} onClick={() => alterarFormParaEdicao(u)}>
+                  <FontAwesomeIcon icon={faPenToSquare} />
+                </td>
+              </tr>
+            ); })  }
+          </tbody>
+            </table> )}
+          
+          { dataEmpty() }
+        </div>
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={handleClose}>
             Não

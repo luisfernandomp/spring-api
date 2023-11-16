@@ -16,6 +16,7 @@ import com.web.spring.api.entities.Empregado;
 import com.web.spring.api.exceptions.CustomException;
 import com.web.spring.api.repositories.CarroRepository;
 import com.web.spring.api.repositories.EmpregadoRepository;
+import com.web.spring.api.repositories.PaisRepository;
 import com.web.spring.api.services.interfaces.IEmpregadoService;
 
 @Service
@@ -26,6 +27,9 @@ public class EmpregadoService implements IEmpregadoService{
 	
 	@Autowired
 	private CarroRepository repoCarro;
+	
+	@Autowired
+	private PaisRepository repoPais;
 	
 	@Override
 	public ApiResponseDto getAll(){
@@ -61,7 +65,12 @@ public class EmpregadoService implements IEmpregadoService{
 	@Override
 	public ApiResponseDto save(EmpregadoDto dto)
 	{
-		var empregado = new Empregado(dto.nome(), dto.salario(), dto.cargo());
+		var result = repoPais.findById(dto.pais_id());
+		
+		if(!result.isPresent())
+			return new ApiResponseDto(false, new ApiResponseMessageDto("País inválido"), HttpStatus.NOT_FOUND);
+		
+		var empregado = new Empregado(dto.nome(), dto.salario(), dto.cargo(), result.get());
 		repo.save(empregado);
 		
 		ArrayList<Carro> carros = new ArrayList<>();

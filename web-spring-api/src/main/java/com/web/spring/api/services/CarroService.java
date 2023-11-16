@@ -12,12 +12,16 @@ import com.web.spring.api.dto.CarroDto;
 import com.web.spring.api.entities.Carro;
 import com.web.spring.api.exceptions.CustomException;
 import com.web.spring.api.repositories.CarroRepository;
+import com.web.spring.api.repositories.EmpregadoRepository;
 
 @Service
 public class CarroService implements ICarroService {
     @Autowired
     private CarroRepository repo;
 
+    @Autowired
+    private EmpregadoRepository repoEmpregado;
+    
     @Override
     public ApiResponseDto getAll(){
         var car = repo.findAll();
@@ -68,7 +72,22 @@ public class CarroService implements ICarroService {
 
 	@Override
 	public ApiResponseDto save(CarroDto dto) {
-		// TODO Auto-generated method stub
-		return null;
+		var empregado = repoEmpregado.findById(dto.empregado_id());
+		
+		if(!empregado.isPresent())
+			return new ApiResponseDto(false, null, HttpStatus.BAD_REQUEST);
+		
+		var carro = new Carro(dto.modelo(), dto.marca(), dto.ano(), dto.categoria(), empregado.get());
+	
+		repo.save(carro);
+		
+		return new ApiResponseDto(true, null, HttpStatus.OK);
+	}
+
+	@Override
+	public ApiResponseDto getAllByEmpregadoId(long id) {
+		
+		var carros = repo.getAllByEmpregadoId(id);
+		return new ApiResponseDto(true, carros, HttpStatus.OK);
 	}
 }

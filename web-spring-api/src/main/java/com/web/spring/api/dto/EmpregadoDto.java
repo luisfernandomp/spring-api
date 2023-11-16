@@ -4,5 +4,6 @@ public record EmpregadoDto (long id,
 							String nome,
 							String cargo,
 							double salario,
-							EmpregadoCarroDto[] carros)
+							EmpregadoCarroDto[] carros,
+							long pais_id)
 {}

@@ -44,12 +44,13 @@ public class Empregado {
 	public Empregado() {
 		
 	}
-	public Empregado(String nome, double salario, String cargo) {
+	public Empregado(String nome, double salario, String cargo, Pais pais) {
 		super();
 		this.nome = nome;
 		this.salario = salario;
 		this.cargo = cargo;
 		this.dataCadastro = LocalDateTime.now();
+		this.pais = pais;
 	}
 
 	public Long getId() {
@@ -63,6 +64,15 @@ public class Empregado {
 	public List<Carro> getCarros(){
 		return carros;
 	}
+	
+	public void setPais(Pais pais) {
+		this.pais = pais;
+	}
+	
+	public Pais getPais() {
+		return pais;
+	}
+	
 	
 	public void setNome(String nome) {
 		this.nome = nome;
