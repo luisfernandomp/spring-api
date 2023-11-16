@@ -8,6 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.web.spring.api.dto.UsuarioDto;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -57,7 +59,6 @@ public class Usuario implements UserDetails {
 		this.role = role;
 		this.dataCadastro = LocalDateTime.now();
 		this.ativo = true;
-		
 	}
 
 	@Override
@@ -67,6 +68,17 @@ public class Usuario implements UserDetails {
 					new SimpleGrantedAuthority("ROLE_USER"));
 		
 		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+	}
+	
+	public UsuarioDto toDto() {
+		return new UsuarioDto(id, nome, email, ativo, role);
+	}
+	
+	public void alterar(UsuarioDto dto) {
+		nome = dto.nome();
+		email = dto.email();
+		role = dto.role();
+		ativo = dto.ativo();
 	}
 
 	@Override

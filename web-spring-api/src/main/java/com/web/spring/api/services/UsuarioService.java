@@ -1,5 +1,9 @@
 package com.web.spring.api.services;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +17,7 @@ import com.web.spring.api.dto.ApiResponseMessageDto;
 import com.web.spring.api.dto.AuthenticationDto;
 import com.web.spring.api.dto.AuthenticationResponseDto;
 import com.web.spring.api.dto.CriarContaDto;
+import com.web.spring.api.dto.UsuarioDto;
 import com.web.spring.api.entities.usuario.Usuario;
 import com.web.spring.api.repositories.UsuarioRepository;
 import com.web.spring.api.services.interfaces.IUsuarioService;
@@ -42,20 +47,41 @@ public class UsuarioService implements IUsuarioService {
 	
 	@Override
 	public ApiResponseDto getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<UsuarioDto> usuariosDto = new ArrayList<>();
+		List<Usuario> users = repo.findAllByOrderByIdAsc();
+		users.forEach(x -> usuariosDto.add(x.toDto()));
+		
+		return new ApiResponseDto(true, usuariosDto, HttpStatus.OK);
 	}
-
+	
 	@Override
 	public ApiResponseDto find(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Usuario> result = repo.findById(id);
+		
+		if(result.isPresent()) {
+			Usuario usuario = result.get();
+			return new ApiResponseDto(true, usuario.toDto(), HttpStatus.OK);
+		}
+		
+		return new ApiResponseDto(false, null, HttpStatus.NOT_FOUND);
 	}
 
 	@Override
-	public ApiResponseDto update(CriarContaDto dto, long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public ApiResponseDto update(UsuarioDto dto, long id) {
+		Optional<Usuario> result = repo.findById(id);
+		
+		if(result.isPresent()) {
+			Usuario usuario = result.get();
+			
+			usuario.alterar(dto);
+			repo.save(usuario);
+			
+			return new ApiResponseDto(true, 
+					new ApiResponseMessageDto("Usuário alterado com sucesso"), 
+					HttpStatus.OK);
+		}
+		
+		return new ApiResponseDto(false, null, HttpStatus.NOT_FOUND);
 	}
 
 	@Override

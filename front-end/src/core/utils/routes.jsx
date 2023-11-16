@@ -6,6 +6,7 @@ import CreateEmployee from "../../pages/empregado/create-employee";
 import Login from "../../pages/login";
 import { HeaderLayout } from "../../components/header-layout";
 import ListUsuarios from "../../pages/usuario/listar-usuarios";
+import ListPaises from "../../pages/pais";
 
 const Rotas = (
   <BrowserRouter>
@@ -13,6 +14,7 @@ const Rotas = (
     <Routes>
       <Route index element={<Login />} />
       <Route element={ <HeaderLayout /> } >
+        <Route path="/paises" element={<ListPaises />} />
         <Route
           path="/empregados"  
           element={<ListEmployee />} />

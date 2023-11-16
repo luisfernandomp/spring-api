@@ -6,6 +6,7 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,11 +34,11 @@ public class Empregado {
 	@Column(nullable = false)
 	private LocalDateTime dataCadastro;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, optional = true)
 	@JoinColumn(name = "pais_id", referencedColumnName = "id")
 	private Pais pais;
 	
-	@OneToMany(mappedBy = "empregado")
+	@OneToMany(mappedBy = "empregado", fetch = FetchType.EAGER)
 	private List<Carro> carros;
 
 	public Empregado() {
@@ -59,6 +60,10 @@ public class Empregado {
 		return nome;
 	}
 
+	public List<Carro> getCarros(){
+		return carros;
+	}
+	
 	public void setNome(String nome) {
 		this.nome = nome;
 	}

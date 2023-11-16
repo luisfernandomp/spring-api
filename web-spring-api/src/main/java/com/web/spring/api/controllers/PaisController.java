@@ -18,8 +18,8 @@ import com.web.spring.api.services.PaisService;
 
 @RestController
 @RequestMapping("api/paises")
-
 public class PaisController {
+	
     @Autowired
     private PaisService service;
 

@@ -30,7 +30,7 @@ export default function HeaderComponent() {
       <div className="menu-lista">
         <ul>
           <li onClick={() => navigate("empregados")}>Empregados</li>
-          <li>Países</li>
+          <li onClick={() => navigate("paises")}>Países</li>
           { usuario.role === "ADMIN" &&
             (<li onClick={() => navigate("usuarios")}>Usuários</li>) }
         </ul>

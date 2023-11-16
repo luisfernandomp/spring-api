@@ -49,7 +49,9 @@ header {
   align-items: center;
 }
 
-
+.menu-lista {
+  margin-left: 100px;
+}
 
 .menu-lista ul li:hover{
   color: #f2b950;

@@ -1,0 +1,17 @@
+.jumbotron{
+    background-color: #e9ecef !important;
+    background-image: none !important;
+}
+
+.edit{
+    font-size: 1.2em;
+    color: rgba(210, 203, 203, 0.379);
+}
+
+.edit:hover {
+    color: rgb(255, 166, 0);
+}
+
+.table-users{
+    margin-top: 3em;
+}

@@ -43,6 +43,11 @@ public class SecurityConfigurations {
 				.csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> authorize
+						//.requestMatchers(HttpMethod.POST, "/api/usuarios").hasRole("ADMIN")
+						//.requestMatchers(HttpMethod.POST, "/api/auth/criar-conta").hasRole("ADMIN")
+						//.requestMatchers(HttpMethod.GET, "/api/usuarios").hasRole("ADMIN")
+						//.requestMatchers(HttpMethod.PUT, "/api/usuarios").hasRole("ADMIN")
+						
 						.requestMatchers(HttpMethod.POST, "/api/auth/criar-conta").permitAll()
 						.requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
 						.anyRequest().authenticated()

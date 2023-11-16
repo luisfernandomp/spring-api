@@ -27,18 +27,19 @@ public class Carro {
     @Column(nullable = false)
     private String categoria;
 
-    @ManyToOne
+    @ManyToOne(optional = true)
     @JoinColumn(name = "empregado_id")
     private Empregado empregado;
     
     public Carro(){}
 
-    public Carro(String modelo, String marca, int ano, String categoria) {
+    public Carro(String modelo, String marca, int ano, String categoria, Empregado empregado) {
         super();
         this.modelo = modelo;
         this.marca = marca;
         this.ano = ano;
         this.categoria = categoria;
+        this.empregado = empregado;
     }
 
     public Long getId() {
