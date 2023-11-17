@@ -13,12 +13,14 @@ export default function FilterComponent({
   setUserStatus,
   startDate,
   endDate,
-  handleChange
+  handleChange,
+  searchEmpregado
 }) {
   const [isActive, setIsActive] = useState(false);
 
   function handleChangeName(event) {
     setUserName(event.target.value);
+    searchEmpregado(event.target.value);
   }
 
   function handleChangeStatus(event) {
@@ -50,7 +52,7 @@ export default function FilterComponent({
       <div
         className="filtros"
         style={{
-          display: isActive ? "block" : "none"
+          display: "none"
         }}
       >
         <div className="text-filtros">Filtros</div>

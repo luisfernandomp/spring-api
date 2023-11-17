@@ -21,10 +21,23 @@ const deleteUser = (id) => {
   return http.delete(`empregados/${id}`, authService.getHeaderAuth());
 }
 
+const getByNome = (q) => {
+  let config = {
+    headers: {'Authorization': 'Bearer ' + authService.getToken()},
+    params: {
+      q: q
+    }
+  }
+
+  return http.get(`empregados/filtros`, config);
+}
+
+
 export default {
   listar,
   getById,
   edit,
   create,
-  deleteUser
+  deleteUser,
+  getByNome
 };

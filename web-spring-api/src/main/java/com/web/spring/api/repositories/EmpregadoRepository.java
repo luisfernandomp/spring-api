@@ -13,4 +13,9 @@ public interface EmpregadoRepository extends JpaRepository<Empregado, Long>
 	@Query(value = "SELECT * FROM empregados e WHERE e.nome LIKE %:q%", 
 			nativeQuery = true)
 	List<Empregado> getByNome(@Param("q") String q); 
+	
+	
+	@Query(value = "SELECT * FROM empregados e WHERE e.pais_id = :id", 
+			nativeQuery = true)
+	List<Empregado> getByPais(@Param("id") long id);	
 }

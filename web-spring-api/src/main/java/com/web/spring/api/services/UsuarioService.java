@@ -73,7 +73,12 @@ public class UsuarioService implements IUsuarioService {
 		if(result.isPresent()) {
 			Usuario usuario = result.get();
 			
+			String encryptedPassword = new 
+					BCryptPasswordEncoder()
+					.encode(dto.senha());
+			
 			usuario.alterar(dto);
+			usuario.setSenha(encryptedPassword);
 			repo.save(usuario);
 			
 			return new ApiResponseDto(true, 

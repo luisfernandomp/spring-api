@@ -44,7 +44,7 @@ public class SecurityConfigurations {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> authorize
 						.requestMatchers(HttpMethod.POST, "/api/usuarios").hasRole("ADMIN")
-						.requestMatchers(HttpMethod.POST, "/api/auth/criar-conta").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.DELETE, "/api/auth/criar-conta").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.GET, "/api/usuarios").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.PUT, "/api/usuarios").hasRole("ADMIN")
 						

@@ -71,7 +71,7 @@ public class Usuario implements UserDetails {
 	}
 	
 	public UsuarioDto toDto() {
-		return new UsuarioDto(id, nome, email, ativo, role);
+		return new UsuarioDto(id, nome, senha, email, ativo, role);
 	}
 	
 	public void alterar(UsuarioDto dto) {

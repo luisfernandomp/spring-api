@@ -1,6 +1,6 @@
 import "./index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faCircleUser,faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import authService from "../../core/services/auth-service";
 import { useEffect, useState } from "react";
@@ -16,6 +16,11 @@ export default function HeaderComponent() {
   const auth = () => {
     const usuario = authService.getTokenDecoded();
     setUsuario(usuario);
+  }
+
+  const sair = () => {
+    localStorage.removeItem('TOKEN');
+    navigate("/");
   }
   
   return (
@@ -38,6 +43,9 @@ export default function HeaderComponent() {
       <div className="email-usuario">
           <div style={{ marginRight: '8px' }}><FontAwesomeIcon icon={faCircleUser} /></div>
           <span>{usuario.nome}</span>
+          <div className="sair" onClick={() => sair()}>
+            <FontAwesomeIcon icon={faRightFromBracket} />
+          </div>
         </div>
       <div className="menu">
         <FontAwesomeIcon icon={faBars} />

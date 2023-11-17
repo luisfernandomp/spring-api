@@ -16,4 +16,8 @@ public interface CarroRepository extends JpaRepository<Carro, Long> {
     @Query(value = "SELECT * FROM carros c WHERE c.empregado_id = :id",
             nativeQuery = true)
     List<Carro> getAllByEmpregadoId(@Param("id") long id);
+    
+    @Query(value = "SELECT * FROM carros c WHERE c.empregado_id = :id", 
+			nativeQuery = true)
+	List<Carro> getCarros(@Param("id") long id);
 }

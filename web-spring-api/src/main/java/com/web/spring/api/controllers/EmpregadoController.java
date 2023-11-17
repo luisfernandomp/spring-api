@@ -36,7 +36,7 @@ public class EmpregadoController {
 		return new ResponseEntity<>(response, response.getStatus());
 	}
 	
-	@GetMapping("filtro")
+	@GetMapping("filtros")
 	public ResponseEntity<Object> getByNome(@RequestParam String q){
 		var response = service.getByNome(q);
 		return new ResponseEntity<>(response, response.getStatus());

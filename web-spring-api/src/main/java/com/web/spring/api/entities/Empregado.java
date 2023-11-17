@@ -11,8 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -34,7 +34,7 @@ public class Empregado {
 	@Column(nullable = false)
 	private LocalDateTime dataCadastro;
 	
-	@OneToOne(cascade = CascadeType.ALL, optional = true)
+	@ManyToOne(cascade = CascadeType.PERSIST, optional = true)
 	@JoinColumn(name = "pais_id", referencedColumnName = "id")
 	private Pais pais;
 	

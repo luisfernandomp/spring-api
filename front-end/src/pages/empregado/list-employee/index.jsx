@@ -80,6 +80,17 @@ export default function ListEmployee() {
       .catch((err) => toast.error('Não foi possível realizar a operação!', defaultToastDefinitions()));
   }
 
+  const deletarCarro = async(carro) => {
+    console.log(carro);
+    await carroService.deleteById(carro.id)
+    .then(() => { 
+        toast.success('Carro deletado com sucesso!', defaultToastDefinitions());
+        getAllByEmpregado(carro.empregado.id);
+        resetForm();
+      })
+    .catch(() => toast.error('Não foi possível realizar a operação!', defaultToastDefinitions()));
+  }
+
   const alterarFormParaEdicao = (carro) => {
     setCarroEdit(carro);
     formik.setFieldValue("id", carro.id);
@@ -94,16 +105,11 @@ export default function ListEmployee() {
     await EmployeeService.deleteUser(idUser).then(() => {
       toast.success('Excluído com sucesso!', defaultToastDefinitions());
         handleClose();
-    }).catch(() => {
-      toast.error('Não foi possível realizar a operação!', defaultToastDefinitions());
+    }).catch((error) => {
+      console.error(error);
+      toast.error(error.response.data.data.erros[0], defaultToastDefinitions());
     })
   }
-
-  const handleChange = (range) => {
-    const [startDate, endDate] = range;
-    setStartDate(startDate);
-    setEndDate(endDate);
-  };
 
   function handleUserClick(id) {
     navigate(`/details-employee/${id}/false`);
@@ -151,6 +157,13 @@ export default function ListEmployee() {
     resetForm();
   }
 
+  const currencyFormat = (num) => {
+    return 'R$ ' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+ }
+
+  const handleChange = () => {
+
+  }
   const dataEmpty = () => {
     if(carros.length == 0) 
         return <div className="not-found"> Nenhum carro encontrado </div>;
@@ -159,6 +172,14 @@ export default function ListEmployee() {
 
   function undefinedOrNull(value){
     return value === null || value === undefined;
+  }
+
+  const searchEmpregado = async(text) => {
+    await EmployeeService.getByNome(text).then((resultado) => {
+      setUsers(resultado.data.data);
+    }).catch(() => {
+      toast.error('Ocorreu um erro na Api!', defaultToastDefinitions());
+    })
   }
 
   let usersFilter = users.filter((user) => {
@@ -198,8 +219,9 @@ export default function ListEmployee() {
         startDate={startDate}
         endDate={endDate}
         handleChange={handleChange}
+        searchEmpregado={searchEmpregado}
       />
-      { usersFilter.length > 0 && (<table className="table table-hover">
+      { users.length > 0 && (<table className="table table-hover">
       <thead>
         <tr>
           <th scope="col">#</th>
@@ -213,12 +235,12 @@ export default function ListEmployee() {
         </tr>
       </thead>
       <tbody>
-        {usersFilter.map((e) => {
+        {users.map((e) => {
         return (
           <tr key={e.id}>
             <th scope="row">{e.id}</th>
             <td>{e.nome}</td>
-            <td>{e.salario}</td>
+            <td>{currencyFormat(e.salario)}</td>
             <td>{e.cargo}</td>
             <td>{e.pais?.nome}</td>
             <td className="edit" onClick={() => editUser(e.id)}>
@@ -235,7 +257,7 @@ export default function ListEmployee() {
       </tbody>
     </table> )}
       
-      { usersFilter.length == 0 &&
+      { users.length == 0 &&
        (<div className="not-found">
         Nenhum empregado encontrado
         </div>)}
@@ -350,7 +372,7 @@ export default function ListEmployee() {
                 <td>{c.marca}</td>
                 <td>{c.ano}</td>
                 <td>{c.categoria}</td>
-                <td style={{ textAlign: 'center' }}>
+                <td style={{ textAlign: 'center' }} onClick={() => deletarCarro(c)}>
                 <FontAwesomeIcon icon={faTrash} />
                 </td>
                 <td className="edit" style={{ textAlign: 'center' }} onClick={() => alterarFormParaEdicao(c)}>

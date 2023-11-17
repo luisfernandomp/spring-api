@@ -52,7 +52,7 @@ export default function ListUsuarios() {
       toast.success("Usuário criado com sucesso", defaultToastDefinitions);
       resetForm();
       listar();
-    }).catch(() => toast.error("Não foi possível concluir a solicitação"));
+    }).catch((error) => toast.error(error.response.data.data.messages[0]));
   }
 
   const editarUsuario = async (id, values, resetForm) => { 

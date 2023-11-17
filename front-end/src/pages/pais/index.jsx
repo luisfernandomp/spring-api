@@ -40,7 +40,7 @@ export default function ListPaises() {
       await paisService.deleteById(id).then(() => {
         toast.success("País excluído com sucesso", defaultToastDefinitions);
         listar();
-      }).catch(() => toast.error("Não foi possível concluir a solicitação"));
+      }).catch((error) => toast.error(error.response.data.data.erros[0]));
   }
 
 

@@ -11,13 +11,17 @@ import com.web.spring.api.dto.ApiResponseMessageDto;
 import com.web.spring.api.dto.PaisDto;
 import com.web.spring.api.entities.Pais;
 import com.web.spring.api.exceptions.CustomException;
+import com.web.spring.api.repositories.EmpregadoRepository;
 import com.web.spring.api.repositories.PaisRepository;
 
 @Service
 public class PaisService implements IPaisService {
     @Autowired
     private PaisRepository repo;
-
+    
+    @Autowired
+    private EmpregadoRepository repoEmpregado;
+    
     @Override
     public ApiResponseDto getAll(){
         var paisx = repo.findAll();
@@ -47,11 +51,17 @@ public class PaisService implements IPaisService {
 
     @Override
     public ApiResponseDto delete(long id) throws CustomException{
+    	
         var pais = findById(id);
 
         if(!pais.isPresent())
             throw new CustomException("Pais não encontrado");
+        
+        var empregados = repoEmpregado.getByPais(id);
 
+        if(empregados.size() > 0)
+        	throw new CustomException("Existem empregados vinculados a esse país");
+        
         repo.delete(pais.get());
 
         return new ApiResponseDto(true, new ApiResponseMessageDto("Pais cadastrado com sucesso"), HttpStatus.OK);

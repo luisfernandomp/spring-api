@@ -1,6 +1,7 @@
 package com.web.spring.api.services;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +89,11 @@ public class EmpregadoService implements IEmpregadoService{
 	@Override
 	public ApiResponseDto delete(long id) throws CustomException
 	{
+		List<Carro> carros = repoCarro.getCarros(id);
+	
+		if(carros.size() > 0)
+			throw new CustomException("Empregado com carro vinculado");
+		
 		var empregado = findById(id);
 		
 		if(!empregado.isPresent())

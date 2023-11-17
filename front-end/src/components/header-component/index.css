@@ -64,6 +64,11 @@ header {
   margin: 0;
 }
 
+.sair{
+  margin: 14px;
+  font-size: 18px;
+}
+
 .menu-lista ul li{
   list-style: none;
   height: 100%;
